@@ -9,16 +9,24 @@
   <body>
     <div class="container">
       <div class="header">
+        <!-- Player -->
         <div class="player-cover">
           <div class="player-health"></div>
           <div id="playerHealth" class="player-health-calc"></div>
         </div>
-        <div class="timer"></div>
+        <!-- Timer -->
+        <div id="timer" class="timer">30</div>
+        <!-- Enemy -->
         <div class="enemy-cover">
           <div class="enemy-health"></div>
           <div id="enemyHealth" class="enemy-health-calc"></div>
         </div>
       </div>
+      <div id="tie" class="tie">
+        <p>No Winner</p>
+        <button class="btn">Play Again</button>
+      </div>
+      <!-- Studio -->
       <canvas id="canvas" />
     </div>
 
