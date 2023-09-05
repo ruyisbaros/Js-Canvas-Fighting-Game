@@ -14,20 +14,44 @@
   width: 100%;
   padding: 20px;
 }
-.header-left {
-  background-color: yellow;
-  height: 30px;
-  width: 100%;
-}
-.header-middle {
+.timer {
   background-color: red;
   height: 100px;
   width: 100px;
   flex-shrink: 0;
   border-radius: 4px;
 }
-.header-right {
+.player-health,
+.enemy-health {
   background-color: yellow;
   height: 30px;
+}
+.player-health {
+  width: 100%;
+}
+.enemy-cover,
+.player-cover {
+  width: 100%;
+  height: 30px;
+  position: relative;
+}
+.player-cover {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.enemy-health-calc,
+.player-health-calc {
+  position: absolute;
+  background: blue;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.enemy-health-calc {
+  left: 0;
+}
+.player-health-calc {
   width: 100%;
 }

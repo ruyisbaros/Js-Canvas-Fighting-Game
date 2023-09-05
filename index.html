@@ -9,9 +9,15 @@
   <body>
     <div class="container">
       <div class="header">
-        <div id="playerHealth" class="header-left"></div>
-        <div class="header-middle"></div>
-        <div id="enemyHealth" class="header-right"></div>
+        <div class="player-cover">
+          <div class="player-health"></div>
+          <div id="playerHealth" class="player-health-calc"></div>
+        </div>
+        <div class="timer"></div>
+        <div class="enemy-cover">
+          <div class="enemy-health"></div>
+          <div id="enemyHealth" class="enemy-health-calc"></div>
+        </div>
       </div>
       <canvas id="canvas" />
     </div>
