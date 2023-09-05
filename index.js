@@ -1,15 +1,33 @@
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
-
-canvas.width = 1500;
+canvas.width = 1024;
 canvas.height = 576;
 
 c.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.7;
 
+//Create instance of background of Studio
+const background = new Sprite({
+  position: {
+    x: 0,
+    y: 0,
+  },
+  imageSrc: "./assets/background.png",
+});
+const shop = new Sprite({
+  position: {
+    x: 600,
+    y: 133,
+  },
+  imageSrc: "./assets/shop.png",
+  scale: 2.7,
+  framesMax: 6,
+});
+
+//Create Player instance
 const player = new Fighter({
   position: {
-    x: 400,
+    x: 100,
     y: 100,
   },
   velocity: {
@@ -20,11 +38,29 @@ const player = new Fighter({
     x: 0,
     y: 0,
   },
+  imageSrc: "./assets/samuraiMack/Idle.png",
+  framesMax: 8,
+  scale: 2.5,
+  playerPngOffset: {
+    x: 215,
+    y: 120,
+  },
+  sprites: {
+    idle: {
+      imageSrc: "./assets/samuraiMack/Idle.png",
+      framesMax: 8,
+    },
+    run: {
+      imageSrc: "./assets/samuraiMack/Run.png",
+      framesMax: 8,
+    },
+  },
 });
 
+//Create Enemy instance
 const enemy = new Fighter({
   position: {
-    x: 1000,
+    x: 500,
     y: 100,
   },
   velocity: {
@@ -35,6 +71,13 @@ const enemy = new Fighter({
   offset: {
     x: -50,
     y: 0,
+  },
+  imageSrc: "./assets/kenji/Idle.png",
+  framesMax: 4,
+  scale: 2.5,
+  playerPngOffset: {
+    x: 215,
+    y: 133,
   },
 });
 
@@ -59,61 +102,30 @@ const keys = {
   },
 };
 
-const rectangularCollision = (rectangle1, rectangle2) => {
-  return (
-    rectangle1.attackBox.position.x + rectangle1.attackBox.width >=
-      rectangle2.position.x &&
-    rectangle1.attackBox.position.x <=
-      rectangle2.position.x + rectangle2.width &&
-    rectangle1.attackBox.position.y + rectangle1.attackBox.height >=
-      rectangle2.position.y &&
-    rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height
-  );
-};
-
-function determineWinner(player, enemy, tID) {
-  clearTimeout(tID);
-  document.querySelector("#tie").style.display = "flex";
-  if (player.health === enemy.health) {
-    document.querySelector("#tie p").innerHTML = "No Winner!";
-  } else if (player.health > enemy.health) {
-    document.querySelector("#tie p").innerHTML = "Player 1 Wins";
-  } else {
-    document.querySelector("#tie p").innerHTML = "Player 2 Wins";
-  }
-}
-
-//Timer
-let defaultTime = 60;
-let timerId;
-function decreaseTimer() {
-  if (defaultTime > 0) {
-    timerId = setTimeout(decreaseTimer, 1000);
-    defaultTime--;
-    document.querySelector("#timer").innerHTML = defaultTime;
-  }
-
-  if (defaultTime === 0) {
-    determineWinner(player, enemy, timerId);
-  }
-}
 decreaseTimer();
 document.querySelector(".btn").addEventListener("click", () => {
   window.location.reload();
 });
+
+//Fully animate function
 function animate() {
   window.requestAnimationFrame(animate);
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
+  background.update();
+  shop.update();
   player.update();
-  enemy.update();
+  //enemy.update();
 
   //Player moves
   player.velocity.x = 0;
+  player.image = player.sprites.idle.image;
   if (keys.a.pressed && player.lastKey === "a") {
     player.velocity.x = -5;
+    player.image = player.sprites.run.image;
   } else if (keys.d.pressed && player.lastKey === "d") {
     player.velocity.x = 5;
+    player.image = player.sprites.run.image;
   }
 
   //Enemy moves
