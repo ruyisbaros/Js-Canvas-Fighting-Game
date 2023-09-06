@@ -71,6 +71,14 @@ const player = new Fighter({
       framesMax: 6,
     },
   },
+  attackBox: {
+    offset: {
+      x: 50,
+      y: 70,
+    },
+    width: 150,
+    height: 50,
+  },
 });
 
 //Create Enemy instance
@@ -84,10 +92,6 @@ const enemy = new Fighter({
     y: 0,
   },
   color: "blue",
-  offset: {
-    x: -50,
-    y: 0,
-  },
   imageSrc: "./assets/kenji/Idle.png",
   framesMax: 4,
   scale: 2.5,
@@ -120,6 +124,14 @@ const enemy = new Fighter({
       imageSrc: "./assets/kenji/Attack2.png",
       framesMax: 4,
     },
+  },
+  attackBox: {
+    offset: {
+      x: -150,
+      y: 70,
+    },
+    width: 170,
+    height: 50,
   },
 });
 
@@ -197,17 +209,35 @@ function animate() {
   }
 
   //Detect for attack/crash each other (collision)
-  if (rectangularCollision(player, enemy) && player.isAttacking) {
+  if (
+    rectangularCollision(player, enemy) &&
+    player.isAttacking &&
+    player.framesCurrent === 4
+  ) {
     console.log("Player attacked");
     player.isAttacking = false;
     enemy.health -= 20;
     document.getElementById("enemyHealth").style.width = enemy.health + "%";
   }
-  if (rectangularCollision(enemy, player) && enemy.isAttacking) {
+
+  //If misses
+  if (player.isAttacking && player.framesCurrent === 4) {
+    player.isAttacking = false;
+  }
+  if (
+    rectangularCollision(enemy, player) &&
+    enemy.isAttacking &&
+    enemy.framesCurrent === 2
+  ) {
     console.log("enemy attacked");
     enemy.isAttacking = false;
     player.health -= 20;
     document.getElementById("playerHealth").style.width = player.health + "%";
+  }
+
+  //If misses
+  if (enemy.isAttacking && enemy.framesCurrent === 2) {
+    enemy.isAttacking = false;
   }
 
   //end Game based on health

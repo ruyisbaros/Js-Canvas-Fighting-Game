@@ -42,12 +42,12 @@ class Fighter {
     position,
     velocity,
     color = "red",
-    offset,
     imageSrc,
     scale = 1,
     framesMax = 1,
     playerPngOffset = { x: 0, y: 0 },
     sprites,
+    attackBox = { offset: {}, width: undefined, height: undefined },
   }) {
     this.position = position;
     this.velocity = velocity;
@@ -59,9 +59,9 @@ class Fighter {
         x: this.position.x,
         y: this.position.y,
       },
-      offset,
-      width: 100,
-      height: 50,
+      offset: attackBox.offset,
+      width: attackBox.width,
+      height: attackBox.height,
     };
     this.color = color;
     this.isAttacking;
@@ -96,17 +96,6 @@ class Fighter {
       (this.image.width / this.framesMax) * this.scale,
       this.image.height * this.scale
     );
-
-    /* //attack box
-    if (this.isAttacking) {
-      c.fillStyle = "green";
-      c.fillRect(
-        this.attackBox.position.x,
-        this.attackBox.position.y,
-        this.attackBox.width,
-        this.attackBox.height
-      );
-    } */
   }
 
   update() {
@@ -119,10 +108,24 @@ class Fighter {
         this.framesCurrent = 0;
       }
     }
+
+    //Attack Boxes
     this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
-    this.attackBox.position.y = this.position.y;
+    this.attackBox.position.y = this.position.y + this.attackBox.offset.y;
+
+    //draw attack box
+
+    /* c.fillRect(
+      this.attackBox.position.x,
+      this.attackBox.position.y,
+      this.attackBox.width,
+      this.attackBox.height
+    ); */
+    //Jumping and movement
     this.position.x += this.velocity.x; //Movement formula
     this.position.y += this.velocity.y; //jumping formula
+
+    //Gravity condition
     if (
       this.position.y + this.height + this.velocity.y >=
       canvas.height - 130
@@ -141,7 +144,7 @@ class Fighter {
     this.isAttacking = true;
     setTimeout(() => {
       this.isAttacking = false;
-    }, 100);
+    }, 1000);
   }
 
   switchSprites(sprite) {
