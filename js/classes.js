@@ -75,13 +75,12 @@ class Fighter {
     this.framesHold = 10;
     this.playerPngOffset = playerPngOffset;
     this.sprites = sprites;
+    this.death = false;
 
     for (let sprite in this.sprites) {
       sprites[sprite].image = new Image();
       sprites[sprite].image.src = sprites[sprite].imageSrc;
     }
-
-    console.log(this.sprites);
   }
 
   draw() {
@@ -97,15 +96,17 @@ class Fighter {
       this.image.height * this.scale
     );
   }
-
+  "./assets/kenji/Death.png";
   update() {
     this.draw();
-    this.framesElapsed++;
-    if (this.framesElapsed % this.framesHold === 0) {
-      if (this.framesCurrent < this.framesMax - 1) {
-        this.framesCurrent++;
-      } else {
-        this.framesCurrent = 0;
+    if (!this.death) {
+      this.framesElapsed++;
+      if (this.framesElapsed % this.framesHold === 0) {
+        if (this.framesCurrent < this.framesMax - 1) {
+          this.framesCurrent++;
+        } else {
+          this.framesCurrent = 0;
+        }
       }
     }
 
@@ -147,12 +148,32 @@ class Fighter {
     }, 1000);
   }
 
+  takeHit() {
+    this.health -= 20;
+
+    if (this.health <= 0) {
+      this.switchSprites("death");
+    } else {
+      this.switchSprites("takeHit");
+    }
+  }
+
   switchSprites(sprite) {
     if (
       this.image === this.sprites.attack1.image &&
       this.framesCurrent < this.sprites.attack1.framesMax - 1
     )
       return;
+    if (
+      this.image === this.sprites.takeHit.image &&
+      this.framesCurrent < this.sprites.takeHit.framesMax - 1
+    )
+      return;
+    if (this.image === this.sprites.death.image) {
+      if (this.framesCurrent === this.sprites.death.framesMax - 1)
+        this.death = true;
+      return;
+    }
     switch (sprite) {
       case "run":
         if (this.image !== this.sprites.run.image) {
@@ -186,6 +207,20 @@ class Fighter {
         if (this.image !== this.sprites.attack1.image) {
           this.image = this.sprites.attack1.image;
           this.framesMax = this.sprites.attack1.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
+      case "takeHit":
+        if (this.image !== this.sprites.takeHit.image) {
+          this.image = this.sprites.takeHit.image;
+          this.framesMax = this.sprites.takeHit.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
+      case "death":
+        if (this.image !== this.sprites.death.image) {
+          this.image = this.sprites.death.image;
+          this.framesMax = this.sprites.death.framesMax;
           this.framesCurrent = 0;
         }
         break;
