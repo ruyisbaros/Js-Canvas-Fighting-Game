@@ -97,7 +97,7 @@ class Fighter {
       this.image.height * this.scale
     );
 
-    //attack box
+    /* //attack box
     if (this.isAttacking) {
       c.fillStyle = "green";
       c.fillRect(
@@ -106,7 +106,7 @@ class Fighter {
         this.attackBox.width,
         this.attackBox.height
       );
-    }
+    } */
   }
 
   update() {
@@ -137,6 +137,7 @@ class Fighter {
   }
 
   attack() {
+    this.switchSprites("attack1");
     this.isAttacking = true;
     setTimeout(() => {
       this.isAttacking = false;
@@ -144,6 +145,11 @@ class Fighter {
   }
 
   switchSprites(sprite) {
+    if (
+      this.image === this.sprites.attack1.image &&
+      this.framesCurrent < this.sprites.attack1.framesMax - 1
+    )
+      return;
     switch (sprite) {
       case "run":
         if (this.image !== this.sprites.run.image) {
